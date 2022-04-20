@@ -1,10 +1,23 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>insertdata</title>
 </head>
 <body>
-{{data}}
+    <ul>
+        {% for key in models %}
+            <li>
+                {{ key }}
+                <ul>
+                    {% for i.value in key %}
+                <li>
+                  {{i}} {{j}}
+                </li>
+                {% endfor %}
+                 </ul>
+
+            </li>
+        {% endfor %}
+    </ul>
 </body>
 </html>

@@ -1,5 +1,6 @@
 from main_app.models import Media
 
+
 class Brands():
     def __init__(self, data, url: str):
         self.url = url
@@ -27,13 +28,20 @@ class Brands():
     def trendyol(self):
         pass
 
+
+
+    
     def zara(self):
-        main_content = self.data.css('div.product-detail-view__main')
-        images = (main_content.css("img::attr(src)").extract())
-        price = (main_content.css('span.price-current__amount::text').extract())
-        title = (main_content.css('span.structured-component-text span::text').extract())
-        m = Media.objects.create(images=images, price=price, title=title)
-        return m
+        main_content = self.data
+        print(200 * '&')
+        model={
+        'images' : (main_content.css("img.media-image__image::attr(src)").extract()),
+        'price' : (main_content.css('span.price-current__amount::text').extract()),
+        'title' : (main_content.css('h1.product-detail-info__header-name span::text').extract()),
+        'description':main_content.css("div.expandable-text__inner-content p::text").extract()
+        }
+        
+        return model
 
     def mango(self):
         main_content = self.data.css('main.product-detail')
