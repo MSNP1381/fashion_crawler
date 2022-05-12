@@ -1,13 +1,21 @@
 from concurrent.futures import thread
 import threading
+from datetime import datetime
+
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 from playwright.sync_api import sync_playwright
 from scrapy import Selector
 import main_app.brands
 from main_app.models import Media
-from asgiref.sync import sync_to_async
+
+import csv
+
+
+
+
 # Create your views here.
 def main_page(req):
     return render(req, 'main_page.html')
@@ -22,28 +30,48 @@ def data_insert(req: WSGIRequest):
         if i.startswith('data'):
             data += (a[i])
     print(data)
-    p=''
-    models=[]
+    p = ''
+    models = []
     for i in data:
         i: str
         with sync_playwright() as playwright:
-            browser =  playwright.webkit.launch()
-            context =  browser.new_context()
-            page =  context.new_page()
+            browser = playwright.webkit.launch()
+            context = browser.new_context()
+            page = context.new_page()
             page.goto(i, timeout=120 * 1000)
             p = (page.inner_html('html'))
-            
-            x= Selector(text=p)
-            # print(p)
+            x = Selector(text=p)
             b = main_app.brands.Brands(x, i)
-            model = ( b.start())
-            models+=model
-            
+            model = (b.start())
+            models.append(model)
             print(model)
             print("started " + i)
-            x = threading.Thread(target=get_all_users, args=(model,))  
+            x = threading.Thread(target=get_all_users, args=(model,))
             x.start()
-    return render(req,"insert_data_page.html",{"models":models})
+    return render(req, "insert_data_page.html", {"m": {'data':models}})
+
 
 def get_all_users(model):
-    ( Media.objects.create(**model))
+    (Media.objects.create(**model))
+
+
+def export_view(req):
+    return render(req, 'date-time-picker.html')
+@csrf_exempt
+def export_page(req):
+    pass
+
+def export(req):
+    print(req.GET)
+    from_date = datetime.fromtimestamp(int(req.GET['from'])/1000)
+    to_date = datetime.fromtimestamp(int(req.GET['to'])/1000)
+    print(from_date,to_date)
+    q = Media.objects.filter(datetime__gte=from_date, datetime__lte=to_date)
+    response = HttpResponse('text/csv')
+    response['Content-Disposition'] = 'attachment; filename=export.csv'
+    writer = csv.writer(response)
+    writer.writerow([' ID', 'title', 'images', 'price', 'description', 'url'])
+    studs = q.values_list('id', 'title', 'images', 'price', 'description', 'url')
+    for std in studs:
+        writer.writerow(std)
+    return response

@@ -16,8 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 import main_app.views as vv
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', vv.main_page),
     path('insert-data', vv.data_insert),
-]
+    path('export', vv.export_view),
+    path('export-data', vv.export),
+    path('export-page', vv.export_page),
+
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

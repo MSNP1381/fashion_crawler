@@ -1,0 +1,73 @@
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <title>Static Example</title>
+        <!-- Bootstrap 4 -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+              rel="stylesheet"
+              integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+              crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+      
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+        <link rel="stylesheet"
+              href="{% static 'mds.bs.datetimepicker.style.css' %}">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <script src="{% static 'mds.bs.datetimepicker.js' %}"></script>
+    </head>
+    <body>
+        <div class="container">
+                <div class="input-group mb-3">
+                        <span id="dp-example1" class="input-group-text x1" id="basic1">@</span>
+                        <input type="text" class="form-control" data-name="dp-example-text1" placeholder="Username"/>
+                </div>
+                <div class="input-group mb-3">
+                        <span id="dp-example2" class="input-group-text" id="basic2">@</span>
+                        <input type="text" class="form-control" data-name="dp-example-text2" placeholder="Username"/>
+                </div>
+        </div>
+        <div class="row">
+            <button class="btn btn-primary col-12 mt-3" onclick="clicked1()">ثبت</button>
+        </div>
+    <script>
+        const dpInstance1 =new mds.MdsPersianDateTimePicker(document.getElementById('dp-example1'), {
+                calendarViewOnChange:function(date){
+                console.log(date);
+                        },
+                        
+                targetTextSelector:'[data-name="dp-example-text1"]',
+                enableTimePicker:true,
+              
+              }   );
+              const dpInstance2 =new mds.MdsPersianDateTimePicker(document.getElementById('dp-example2'), {
+              
+                      targetTextSelector:'[data-name="dp-example-text2"]',
+                      enableTimePicker:true,
+                    
+                    }   );
+$(document).ready(function() {
+  
+
+});
+function clicked1(){
+
+              
+        console.log("ok");
+        
+        
+
+        console.log({ from:dpInstance1.getDate().getTime(),to:dpInstance2.getDate().getTime() });
+        window.open("/export-data?from="+dpInstance1.getDate().getTime()+"&to="+dpInstance2.getDate().getTime());
+
+
+}
+
+
+
+    </script>
+</body>
+</html>

@@ -1,23 +1,75 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>insertdata</title>
-</head>
-<body>
-    <ul>
-        {% for key in models %}
-            <li>
-                {{ key }}
-                <ul>
-                    {% for i.value in key %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>insertdata</title>
+        <script src="{% static '/jquery.js' %}"></script>
+        
+    </head>
+    <body>
+        {{ m.data|unordered_list }}
+        <ul>
+            {% for i in m.data %}
                 <li>
-                  {{i}} {{j}}
+                    <ul>
+                        {% for key,value in i.items %}
+                            <li>
+                                {{ key }}
+                                <ul>
+                                    {% if key|first in  'images' %}
+                                        {% for j in value %}
+                                            {% if j|first in 'http' %}
+                                                <li>
+                                                    <a class="x1" href="{{ j }}">{{ j }}</a>
+                                                </li>
+                                            {% else %}
+                                                <li class="x1">{{ j }}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        <li>{{ value }}</li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </li>
-                {% endfor %}
-                 </ul>
+            {% endfor %}
+        </ul>
+        <button class="btn btn-primary" onclick="clicked1()">Export this data</button>
+        
+        <script>
 
-            </li>
-        {% endfor %}
-    </ul>
-</body>
+            function make_data(){
+                return [ {% for i in m.data %}
+                        { {% for key,value in i.items %}   
+                                 "{{ key }}":
+                                      {% if key|first in  'images' %}
+                                          $(".x1:text").each(function(e){e.text()}).toArray()
+                                      {% else %}
+                                        "{{ value }}"
+                                      {% endif %}
+                              ,
+                          {% endfor %}
+                          }
+                  ,
+              {% endfor %}]
+              }  
+
+   
+    function clicked1(){
+        console.log("ok");
+        console.log("salamat")
+        $.ajax('/export-page',{
+            data:JSON.parse(make_data())
+
+        }); 
+    
+    }
+    
+    $(document).ready(function() {console.log("ok1");
+});
+        </script>
+    </body>
 </html>

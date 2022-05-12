@@ -7,3 +7,5 @@ class Media(models.Model):
     images = models.JSONField()
     description = models.TextField(blank=True)
     price = models.CharField(max_length=40)
+    datetime = models.DateTimeField(auto_now=True)
+    url = models.URLField()
