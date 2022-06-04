@@ -22,7 +22,7 @@ COPY . $DockerHOME
 # run this command to install all dependencies  
 RUN pip3 install -r requirements.txt
 
-RUN playwright install webkit
+RUN playwright install chromium
 
 # port where the Django app runs  
 EXPOSE 8000  

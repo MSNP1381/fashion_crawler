@@ -35,7 +35,7 @@ def data_insert(req: WSGIRequest):
     for i in data:
         i: str
         with sync_playwright() as playwright:
-            browser = playwright.webkit.launch()
+            browser = playwright.chromium.launch()
             context = browser.new_context()
             page = context.new_page()
             page.goto(i, timeout=120 * 1000)
