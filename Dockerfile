@@ -1,5 +1,5 @@
 # base image  
-FROM python:3.8   
+FROM python:3.9   
 # setup environment variable  
 ENV DockerHOME=/home/app
 
@@ -20,7 +20,7 @@ RUN pip install --upgrade pip
 COPY . $DockerHOME  
 
 # run this command to install all dependencies  
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 
 RUN playwright install webkit
 
