@@ -58,8 +58,16 @@ class Brands():
         return model
 
     def pullandbear(self):
-        pass
 
+            main_content=self.data
+            model = {
+            'images': main_content.css('div.cell figure img::attr(src)').extract(),
+            "price": main_content.css("span.number.hansolo::text").get(),
+            'title': main_content.css('#titleProductCard::text').get(),
+            'description':main_content.css("span.c-product-info--description-text::text").get(),
+            'url': self.url
+        }
+            return model
     def hm(self):
         main_content = self.data.css('#main-content div.product.parbase div.layout')
         model = {

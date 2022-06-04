@@ -1,4 +1,6 @@
 from concurrent.futures import thread
+import json
+
 import threading
 from datetime import datetime
 
@@ -12,8 +14,6 @@ import main_app.brands
 from main_app.models import Media
 
 import csv
-
-
 
 
 # Create your views here.
@@ -48,7 +48,7 @@ def data_insert(req: WSGIRequest):
             print("started " + i)
             x = threading.Thread(target=get_all_users, args=(model,))
             x.start()
-    return render(req, "insert_data_page.html", {"m": {'data':models}})
+    return render(req, "insert_data_page.html", {"m": {'data': models}})
 
 
 def get_all_users(model):
@@ -57,21 +57,35 @@ def get_all_users(model):
 
 def export_view(req):
     return render(req, 'date-time-picker.html')
+
+
 @csrf_exempt
 def export_page(req):
-    pass
+    js=json.loads(req.POST['data'])
+    print(js)
+    js=js[0]
+    response = HttpResponse('text/csv')
+    response['Content-Disposition'] = 'attachment; filename=export.csv'
+    writer = csv.writer(response)
+    writer.writerow([' ID', 'title', 'images', 'price', 'description', 'url'])
+    writer.writerow([1,js.get('title'),js.get('images'),js.get('price'),js.get('description'),js.get("url")])
+    # return HttpResponse(req.POST.dict()['data'])
+    return response
+
+
 
 def export(req):
     print(req.GET)
     from_date = datetime.fromtimestamp(int(req.GET['from'])/1000)
     to_date = datetime.fromtimestamp(int(req.GET['to'])/1000)
-    print(from_date,to_date)
+    print(from_date, to_date)
     q = Media.objects.filter(datetime__gte=from_date, datetime__lte=to_date)
     response = HttpResponse('text/csv')
     response['Content-Disposition'] = 'attachment; filename=export.csv'
     writer = csv.writer(response)
     writer.writerow([' ID', 'title', 'images', 'price', 'description', 'url'])
-    studs = q.values_list('id', 'title', 'images', 'price', 'description', 'url')
+    studs = q.values_list('id', 'title', 'images',
+                          'price', 'description', 'url')
     for std in studs:
         writer.writerow(std)
     return response

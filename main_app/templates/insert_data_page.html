@@ -8,7 +8,7 @@
         
     </head>
     <body>
-        {{ m.data|unordered_list }}
+   
         <ul>
             {% for i in m.data %}
                 <li>
@@ -38,15 +38,24 @@
             {% endfor %}
         </ul>
         <button class="btn btn-primary" onclick="clicked1()">Export this data</button>
-        
+        <button id="copy"></button>
+        <div class="csvtitle"></div><br/>
+        <div class="csvdesc"></div>
+
         <script>
 
             function make_data(){
+                ls=[];
+                $.each($(".x1"), function( index, value ) {
+                    ls.push( value.text );
+                  });
+
+                console.log(ls)
                 return [ {% for i in m.data %}
                         { {% for key,value in i.items %}   
                                  "{{ key }}":
                                       {% if key|first in  'images' %}
-                                          $(".x1:text").each(function(e){e.text()}).toArray()
+                                          ls
                                       {% else %}
                                         "{{ value }}"
                                       {% endif %}
@@ -61,10 +70,21 @@
     function clicked1(){
         console.log("ok");
         console.log("salamat")
+        console.log(make_data())
         $.ajax('/export-page',{
-            data:JSON.parse(make_data())
+            type: 'POST',
+            data:{data:JSON.stringify(make_data())}
+            ,success: function(e){
+                console.log(e);
+                e=e.split("\n");
+                $('.csvtitle').text(e[0]);
+                $('.csvdesc').text(e[01]);
 
-        }); 
+            }
+        }
+        
+        
+        ); 
     
     }
     
