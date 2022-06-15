@@ -35,8 +35,11 @@ def data_insert(req: WSGIRequest):
     for i in data:
         i: str
         with sync_playwright() as playwright:
-            browser = playwright.chromium.launch(proxy={"server": "per-context"})
-            context = browser.new_context(proxy={"server": "http://127.0.0.1:9050"})
+            browser = playwright.chromium.launch(proxy={
+  "server": "http://127.0.0.1:9050",
+            }
+)
+            context = browser.new_context()
             page = context.new_page()
             page.goto(i, timeout=120 * 1000)
             p = (page.inner_html('html'))
