@@ -39,8 +39,8 @@ class Brands():
             'price': (main_content.css(
                 '#main > article > div.product-detail-view__main > div.product-detail-view__side-bar > div.product-detail-info > div.product-detail-info__price > div > span > span > span::text').extract()[
                 0]),
-            'title': (main_content.css('h1.product-detail-info__header-name::text').extract()[0]),
-            'description': main_content.css("div.expandable-text__inner-content p::text").extract()[0],
+            'title': (main_content.css('h1.product-detail-info__header-name::text').get()),
+            'description': main_content.css("div.expandable-text__inner-content p::text").get(),
             'url': self.url
         }
 
@@ -49,10 +49,10 @@ class Brands():
     def mango(self):
         main_content = self.data.css('main.product-detail')
         model = {
-            'price': (main_content.css('span.product-sale::text').extract()[0]),
+            'price': (main_content.css('span.product-sale::text').get()),
             'images': list(
                 map(lambda x: "https:" + x, main_content.css('div.product-images img::attr(src)').extract())),
-            'title': (main_content.css("h1.product-name::text").extract()[0]),
+            'title': (main_content.css("h1.product-name::text").get()),
             'url': self.url
         }
         return model
@@ -76,10 +76,10 @@ class Brands():
                                                              'figure img::attr('
                                                              'src)').extract()))
             ,
-            "price": (main_content.css("#product-price > div span::text").extract()),
+            "price": (main_content.css("#product-price > div span::text").extract()[0]),
             'title': (main_content.css("div.module.product-description.sticky-wrapper > "
                                        "div.sub-content.product-detail-info.product-detail-meta.inner.sticky-on-scroll.semi"
-                                       "-sticky > div > section > h1::text").extract()),
+                                       "-sticky > div > section > h1::text").extract()[0]),
             'url': self.url
         }
         return model
@@ -88,9 +88,9 @@ class Brands():
         x = self.data
         model = {
             'price': (x.css("#rightInfoBar > div:nth-child(1) > div > div:nth-child(3) > div > div > div > "
-                            "span.price::text").extract()[0]),
+                            "span.price::text").get()),
             'title': (x.css("#rightInfoBar > div:nth-child(1) > div > div.row.title-info > div.col-xs-7.col-sm-9 > "
-                            "div.product-title::text").extract()[0]),
+                            "div.product-title::text").get()),
             'images': (x.css("#productSliderPhotos > div.product-images-desktop.hidden-xs img::attr(src)").extract()),
             'url': self.url
         }
