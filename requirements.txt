@@ -1,3 +1,4 @@
 django
 playwright
 scrapy
+django-tor

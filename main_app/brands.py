@@ -37,8 +37,7 @@ class Brands():
             'images': filter(lambda x: not x.endswith('transparent-background.png'),
                              main_content.css("img.media-image__image.media__wrapper--media::attr(src)").extract()),
             'price': (main_content.css(
-                '#main > article > div.product-detail-view__main > div.product-detail-view__side-bar > div.product-detail-info > div.product-detail-info__price > div > span > span > span::text').extract()[
-                0]),
+                '#main > article > div.product-detail-view__main > div.product-detail-view__side-bar > div.product-detail-info > div.product-detail-info__price > div > span > span > span::text').get()),
             'title': (main_content.css('h1.product-detail-info__header-name::text').get()),
             'description': main_content.css("div.expandable-text__inner-content p::text").get(),
             'url': self.url

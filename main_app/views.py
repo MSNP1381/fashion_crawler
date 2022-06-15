@@ -35,26 +35,28 @@ def data_insert(req: WSGIRequest):
     for i in data:
         i: str
         with sync_playwright() as playwright:
-            browser = playwright.chromium.launch(proxy={
-  "server": "http://127.0.0.1:9050",
-            }
-)
+            browser = playwright.chromium.launch(headless=False)
             context = browser.new_context()
             page = context.new_page()
             page.goto(i, timeout=120 * 1000)
             p = (page.inner_html('html'))
+            # with open("x.html"  ,"w")as f:
+            #     f.write(str(p))
             x = Selector(text=p)
             b = main_app.brands.Brands(x, i)
             model = (b.start())
             models.append(model)
-            print(model)
+            print("models: ",model)
             print("started " + i)
             x = threading.Thread(target=get_all_users, args=(model,))
             x.start()
+    print(100*"$")
+    print(models)
     return render(req, "insert_data_page.html", {"m": {'data': models}})
 
 
 def get_all_users(model):
+    if model['title']==None:return
     (Media.objects.create(**model))
 
 
